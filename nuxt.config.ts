@@ -7,6 +7,7 @@ export default defineNuxtConfig({
       url: "http://localhost"
     }
   },
+  modules: ["@tresjs/nuxt"],
   nitro: {
     plugins: ["./plugins/socket.io.server"]
   }

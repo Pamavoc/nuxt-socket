@@ -2,6 +2,7 @@ import { Server } from 'socket.io';
 import { SocketEvent } from "~/utils/SocketEvent";
 
 let count = 0;
+let countPlayer = 0
 const socketPort = useRuntimeConfig().public.socketPort;
 
 export default defineNitroPlugin((nitroApp)=> {
@@ -13,6 +14,14 @@ export default defineNitroPlugin((nitroApp)=> {
     socketServer.on('connection', (socket) => {
         console.log('Socket connected', count);
         socket.emit(SocketEvent.new_count, count++)
+
+        socket.emit(SocketEvent.new_player, countPlayer++)
+
+
+        socket.on('disconnect', () => {
+            console.log('Socket disconnected', count);
+            socketServer.emit(SocketEvent.new_player, countPlayer--)
+        })
 
         socket.on(SocketEvent.up, (message: { value: number}) => {
             count = count + message.value;
